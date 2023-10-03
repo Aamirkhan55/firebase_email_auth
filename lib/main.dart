@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
 import 'package:firebase_email_auth/firbase_email_auth/sign_in.dart';
 import 'package:flutter/material.dart';
 
@@ -12,16 +13,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Email Auth',
-        theme: ThemeData(
-          primaryColor: Colors.teal,
-          useMaterial3: true,
-        ),
-        home: const SignInScreen(),
-      ),
-    );
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+           return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Email Auth',
+              theme: ThemeData(
+                primaryColor: Colors.teal,
+                useMaterial3: true,
+              ),
+              home: const AuthSuccessPage(),
+            );
+            }else {
+              return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Email Auth',
+              theme: ThemeData(
+                primaryColor: Colors.teal,
+                useMaterial3: true,
+              ),
+              home: const SignInScreen(),
+            );
+            }
+        }
+        );
   }
 }

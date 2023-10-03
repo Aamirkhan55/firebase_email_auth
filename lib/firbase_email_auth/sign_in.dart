@@ -131,12 +131,29 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Don't have an account? Create Account",
-                style: TextStyle(fontSize: 15),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Don't have an account?",
+                  style: TextStyle(fontSize: 15),
+                ),
+                const SizedBox(width: 10),
+                InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignInScreen()));
+                    },
+                    child: const Text(
+                      "Sign Up",
+                      style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline),
+                    ))
+              ],
             ),
           ],
         ),
