@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
+import 'package:firebase_email_auth/firbase_email_auth/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -150,12 +151,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Don't have an account? Create Account",
-                style: TextStyle(fontSize: 15),
-              ),
+           Row(
+              children: [
+                const Text(
+                  "Already have account!",
+                  style: TextStyle(fontSize: 15),
+                ),
+                const SizedBox(width: 10),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignInScreen()));
+                  },
+                child: const Text("Sign In", style: TextStyle(
+                  color: Colors.green, fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline
+                ) , 
+            )  
+                ),
+              ],
             ),
           ],
         ),
