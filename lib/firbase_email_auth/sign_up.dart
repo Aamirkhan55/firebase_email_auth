@@ -16,7 +16,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  bool _isSigningUp = false;
+  bool? _isSigningUp = false;
 
  @override
   void dispose() {
@@ -28,10 +28,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
               child: Form(
@@ -151,25 +153,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ),
-           Row(
-              children: [
-                const Text(
-                  "Already have account!",
-                  style: TextStyle(fontSize: 15),
-                ),
-                const SizedBox(width: 10),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignInScreen()));
-                  },
-                child: const Text("Sign In", style: TextStyle(
-                  color: Colors.green, fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline
-                ) , 
-            )  
-                ),
-              ],
-            ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Already have account!",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  const SizedBox(width: 10),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, 
+                      MaterialPageRoute(builder: (context) => const SignInScreen()));
+                    },
+                  child: const Text(
+                    "Sign In", 
+                    style: TextStyle(
+                    color: Colors.blue, 
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline
+                  ) , 
+              )  
+                  ),
+                ],
+              ),
+           ),
           ],
         ),
       ),

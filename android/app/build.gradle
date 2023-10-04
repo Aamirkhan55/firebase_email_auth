@@ -27,7 +27,6 @@ android {
     namespace "com.example.firebase_email_auth"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
-    multiDexEnabled true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -66,6 +65,4 @@ flutter {
     source '../..'
 }
 
-dependencies {
-      implementation 'com.android.support:multidex:1.0.3'
-}
+dependencies {}

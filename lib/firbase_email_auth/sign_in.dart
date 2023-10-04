@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
+import 'package:firebase_email_auth/firbase_email_auth/sign_up.dart';
 import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  bool _isSingingIn = false;
+  bool? _isSingingIn = false;
 
   @override
   void dispose() {
@@ -26,9 +27,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
             Expanded(
@@ -144,14 +145,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SignInScreen()));
+                              builder: (context) => const SignUpScreen()));
                     },
                     child: const Text(
                       "Sign Up",
                       style: TextStyle(
-                          color: Colors.green,
+                          color: Colors.blue,
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
+                          decoration: TextDecoration.underline,
+                          ),
                     ))
               ],
             ),
