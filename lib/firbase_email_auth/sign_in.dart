@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
 import 'package:firebase_email_auth/firbase_email_auth/sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -150,10 +151,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: const Text(
                       "Sign Up",
                       style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          ),
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
                     ))
               ],
             ),
@@ -170,18 +171,31 @@ class _SignInScreenState extends State<SignInScreen> {
       });
       final auth = FirebaseAuth.instance;
 
-      await auth
-          .signInWithEmailAndPassword(
-        email: _emailConroller.text,
-        password: _passwordController.text,
-      )
-          .then((value) {
-        setState(() {
-          _isSingingIn = false;
+      try {
+        await auth
+            .signInWithEmailAndPassword(
+          email: _emailConroller.text,
+          password: _passwordController.text,
+        )
+            .then((value) {
+          setState(() {
+            _isSingingIn = false;
+          });
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AuthSuccessPage()));
         });
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AuthSuccessPage()));
-      });
+      } on FirebaseAuthException catch (e) {
+         setState(() {
+           _isSingingIn = false;
+         });
+          if (e.code == 'user-not-found') {
+            Fluttertoast.showToast(msg: 'User Not Found');
+          }  else if(e.code == 'weak-password') {
+            Fluttertoast.showToast(msg: 'Invalid Email or Password');
+          } else {
+            Fluttertoast.showToast(msg: "Error : ${e.message}");
+          }
+      }
     } else {
       return null;
     }

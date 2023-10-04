@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
 import 'package:firebase_email_auth/firbase_email_auth/sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool? _isSigningUp = false;
 
- @override
+  @override
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
@@ -137,8 +138,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             alignment: Alignment.center,
                             child: _isSigningUp == true
                                 ? const CircularProgressIndicator(
-                                  color:  Colors.white,
-                                )
+                                    color: Colors.white,
+                                  )
                                 : const Text(
                                     "Sign Up",
                                     style: TextStyle(
@@ -153,9 +154,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ),
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Row(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
@@ -164,22 +165,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(width: 10),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(context, 
-                      MaterialPageRoute(builder: (context) => const SignInScreen()));
-                    },
-                  child: const Text(
-                    "Sign In", 
-                    style: TextStyle(
-                    color: Colors.blue, 
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline
-                  ) , 
-              )  
-                  ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignInScreen()));
+                      },
+                      child: const Text(
+                        "Sign In",
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline),
+                      )),
                 ],
               ),
-           ),
+            ),
           ],
         ),
       ),
@@ -193,17 +194,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       final auth = FirebaseAuth.instance;
 
-      await auth
-          .createUserWithEmailAndPassword(
-            email: _emailController.text,
-            password: _passwordController.text,
-          ).then((value) { 
+      try {
+        await auth
+            .createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        )
+            .then((value) {
           setState(() {
             _isSigningUp = false;
-          });  
-          Navigator.push(context,MaterialPageRoute(
-                  builder: (context) => const AuthSuccessPage()));
-                  });
+          });
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AuthSuccessPage()));
+        });
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isSigningUp = false;
+        });
+        if (e.code == 'email-already-in-use') {
+          Fluttertoast.showToast(msg: 'The Account is already exist');
+        } else if (e.code == 'invalid-email') {
+          Fluttertoast.showToast(msg: 'The email address is not valid');
+        } else if (e.code == 'weak-password') {
+          Fluttertoast.showToast(msg: 'Password is not strong enough..!');
+        } else {
+          Fluttertoast.showToast(msg: "Error : ${e.message}");
+        }
+      }
     } else {
       return null;
     }
