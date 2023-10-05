@@ -3,6 +3,8 @@ import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
 import 'package:firebase_email_auth/screens/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -129,6 +131,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                   )),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orangeAccent),
+                      onPressed: _signInWithGoogle,
+                      icon: const Icon(FontAwesomeIcons.google),
+                      label: const Text('Sign In With Google'),
+                    )
                   ],
                 ),
               ),
@@ -185,19 +195,42 @@ class _SignInScreenState extends State<SignInScreen> {
               MaterialPageRoute(builder: (context) => const AuthSuccessPage()));
         });
       } on FirebaseAuthException catch (e) {
-         setState(() {
-           _isSingingIn = false;
-         });
-          if (e.code == 'user-not-found') {
-            Fluttertoast.showToast(msg: 'User Not Found');
-          }  else if(e.code == 'weak-password') {
-            Fluttertoast.showToast(msg: 'Invalid Email or Password');
-          } else {
-            Fluttertoast.showToast(msg: "Error : ${e.message}");
-          }
+        setState(() {
+          _isSingingIn = false;
+        });
+        if (e.code == 'user-not-found') {
+          Fluttertoast.showToast(msg: 'User Not Found');
+        } else if (e.code == 'weak-password') {
+          Fluttertoast.showToast(msg: 'Invalid Email or Password');
+        } else {
+          Fluttertoast.showToast(msg: "Error : ${e.message}");
+        }
       }
     } else {
       return null;
+    }
+  }
+
+  _signInWithGoogle() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken,
+        );   
+
+        await _auth.signInWithCredential(credential); 
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error : $e");
     }
   }
 }
