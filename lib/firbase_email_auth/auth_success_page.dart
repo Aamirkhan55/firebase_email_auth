@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_email_auth/firbase_email_auth/sign_in.dart';
+import 'package:firebase_email_auth/screens/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class AuthSuccessPage extends StatelessWidget {

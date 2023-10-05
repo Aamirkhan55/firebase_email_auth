@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_email_auth/firbase_email_auth/auth_success_page.dart';
-import 'package:firebase_email_auth/firbase_email_auth/sign_up.dart';
+import 'package:firebase_email_auth/screens/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
